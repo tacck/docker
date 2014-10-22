@@ -1,0 +1,32 @@
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = "ubuntu-14.04"
+  config.vm.network "private_network", ip: "192.168.55.44"
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.groups = {
+      "vagrant" => ["localhost"]
+    }
+    ansible.playbook = "provision.yml"
+  end
+
+#  config.vm.provision:shell, :inline => <<-PREPARE
+#apt-get -y install docker.io
+#PREPARE
+
+#apt-get -y update
+#apt-get install -y wget unzip curl
+#apt-get install docker.io
+#ln -sf /usr/bin/docker.io /usr/local/bin/docker
+#sed -i '$acomplete -F _docker docker' /etc/bash_completion.d/docker.io
+#mkdir /home/vagrant/packer
+#cd /home/vagrant/packer
+#wget https://dl.bintray.com/mitchellh/packer/packer_0.7.1_linux_amd64.zip
+#unzip packer_0.7.1_linux_amd64.zip
+#echo "export PATH=$PATH:/home/vagrant/packer" > /home/vagrant/.bashrc
+
+  config.vm.provision "file", source: "packer.json", destination: "packer.json"
+
+end
