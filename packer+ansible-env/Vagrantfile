@@ -13,5 +13,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.provision "file", source: "packer.json", destination: "packer.json"
+  config.vm.provision "file", source: "packer-ansible.json", destination: "packer-ansible.json"
+  config.vm.provision "file", source: "nginx.yml", destination: "nginx.yml"
 
 end
