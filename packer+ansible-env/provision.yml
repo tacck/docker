@@ -1,9 +1,10 @@
 - hosts: all
-  sudo: yes
+  become: yes
   vars:
     packer_home: /home/vagrant/packer
     packer_bin: /home/vagrant/bin
-    packer_file: packer_0.7.1_linux_amd64.zip
+    packer_site: https://releases.hashicorp.com/packer/0.8.6
+    packer_file: packer_0.8.6_linux_amd64.zip
   tasks:
   - name: install docker
     apt: name={{ item }} state=latest
@@ -17,8 +18,6 @@
       src=/usr/bin/docker.io
       path=/usr/local/bin/docker
       state=link
-  - name: set bash_completion
-    shell: sed -i '$acomplete -F _docker docker' /etc/bash_completion.d/docker.io
   - name: add docker group
     shell: gpasswd -a vagrant docker
   - name: mkdir packer
@@ -29,7 +28,7 @@
       group=vagrant
   - name: fetch packer
     get_url:
-      url=https://dl.bintray.com/mitchellh/packer/{{ packer_file }}
+      url={{ packer_site }}/{{ packer_file }}
       dest={{ packer_home }}/{{ packer_file }}
   - name: mkdir bin
     file:
